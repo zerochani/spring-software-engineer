@@ -5,7 +5,7 @@ GET http://localhost:8080
 GET http://localhost:8080/api/v1/software-engineers
 
 ### 특정 id의 엔지니어 조회
-GET http://localhost:8080/api/v1/software-engineers/7
+GET http://localhost:8080/api/v1/software-engineers/2
 
 ### 새 엔지니어 등록
 POST http://localhost:8080/api/v1/software-engineers
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### 엔지니어 정보 업데이트
-PUT http://localhost:8080/api/v1/software-engineers/1
+PUT http://localhost:8080/api/v1/software-engineers/3
 Content-Type: application/json
 
 {
@@ -27,4 +27,4 @@ Content-Type: application/json
 
 ### 엔지니어 삭제
 
-DELETE http://localhost:8080/api/v1/software-engineers/1
+DELETE http://localhost:8080/api/v1/software-engineers/2

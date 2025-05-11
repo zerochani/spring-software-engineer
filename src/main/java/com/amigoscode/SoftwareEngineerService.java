@@ -1,8 +1,11 @@
 package com.amigoscode;
 
+import com.amigoscode.dto.SoftwareEngineerRequest;
+import com.amigoscode.dto.SoftwareEngineerResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 //비즈니스 로직
 //데이터 처리의 중심 역할, 컨트롤러와 리포지토리 사이에서 데이터를 조율하는 계층
 
@@ -16,29 +19,34 @@ public class SoftwareEngineerService {
         this.softwareEngineerRepository = softwareEngineerRepository;
     }
 
-    //테이블 모든 레코드를 조회.
-    public List<SoftwareEngineer> getSoftwareEngineers(){
-        return softwareEngineerRepository.findAll();
+    //전체 목록 조회 -> 응답 DTO로 변환
+    public List<SoftwareEngineerResponse> getSoftwareEngineers(){
+        return softwareEngineerRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
     //새 엔티티를 저장하거나 기존 엔티티를 업데이트.
-    public void insertSoftwareEngineer(SoftwareEngineer softwareEngineer) {
-        softwareEngineerRepository.save(softwareEngineer);
+    public Integer insertSoftwareEngineer(SoftwareEngineerRequest request) {
+        SoftwareEngineer engineer = new SoftwareEngineer(null, request.getName(), request.getTechStack());
+        return softwareEngineerRepository.save(engineer).getId();
     }
 
-    //findById(id)는 Optional을 반환하므로, 값이 없을 경우 orElseThrow로 예외를 발생.
-    //IllegalStateException은 클라이언트에게 적절한 에러 응답을 줄 수 있음.
-    public SoftwareEngineer getSoftwareEngineerById(Integer id) {
-        return softwareEngineerRepository.findById(id)
+    //ID로 단건 조회(Entity->DTO 변환)
+    public SoftwareEngineerResponse getSoftwareEngineerById(Integer id) {
+        SoftwareEngineer engineer =  softwareEngineerRepository.findById(id)
                 .orElseThrow(()-> new IllegalStateException(id +" not found"));
+        return toResponse(engineer);
     }
 
-    public void updateSoftwareEngineer(Integer id, SoftwareEngineer updatedEngineer){
+    //엔지니어 수정
+    public void updateSoftwareEngineer(Integer id, SoftwareEngineerRequest request){
         SoftwareEngineer existing = softwareEngineerRepository.findById(id)
                 .orElseThrow(()-> new IllegalStateException(id + " not found"));
 
-        existing.setName(updatedEngineer.getName());
-        existing.setTechStack(updatedEngineer.getTechStack());
+        existing.setName(request.getName());
+        existing.setTechStack(request.getTechStack());
 
         softwareEngineerRepository.save(existing);
     }
@@ -48,5 +56,14 @@ public class SoftwareEngineerService {
             throw new IllegalStateException(id + " not found");
         }
         softwareEngineerRepository.deleteById(id);
+    }
+
+    //엔티티를 응답 DTO로 변환
+    private SoftwareEngineerResponse toResponse(SoftwareEngineer engineer){
+        return new SoftwareEngineerResponse(
+                engineer.getId(),
+                engineer.getName(),
+                engineer.getTechStack()
+        );
     }
 }

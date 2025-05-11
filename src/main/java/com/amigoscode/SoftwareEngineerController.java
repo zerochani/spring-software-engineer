@@ -1,5 +1,8 @@
 package com.amigoscode;
 
+import com.amigoscode.dto.SoftwareEngineerRequest;
+import com.amigoscode.dto.SoftwareEngineerResponse;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,33 +18,32 @@ public class SoftwareEngineerController {
         this.softwareEngineerService = softwareEngineerService;
     }
 
-    //전체 소프트웨어 엔지니어 조회
+    //전체 조회(DTO 응답)
     @GetMapping //데이터베이스에 저장된 모든 객체들을 반환.
-    public List<SoftwareEngineer> getEngineers() {
+    public List<SoftwareEngineerResponse> getEngineers() {
         return softwareEngineerService.getSoftwareEngineers();
     }
 
-    //특정 id의 소프트웨어 엔지니어 조회
+    //특정 id의 소프트웨어 엔지니어 조회(DTO 응답)
     //@PathVariable: url 경로 변수에서 id 값을 추출하여 메서드 파라미터로 전달.
     @GetMapping("{id}")
-    public SoftwareEngineer getEngineersById(@PathVariable Integer id) {
+    public SoftwareEngineerResponse getEngineersById(@PathVariable Integer id) {
         return softwareEngineerService.getSoftwareEngineerById(id);
     }
 
-    //새 소프트웨어 엔지니어 추가
-    //요청 바디에 포함된 json 데이터를 softwareEngineer객체로 변환하고, 서비스 계층을 통해 db에 저장.
-    //requestBody: http 요청의 json 본문을 자바 객체로 매핑해준다.
+    //새 소프트웨어 엔지니어 추가(DTO 요청 + 등록된 ID 반환)
     @PostMapping
-    public void addNewSoftwareEngineer(@RequestBody SoftwareEngineer softwareEngineer) {
-        softwareEngineerService.insertSoftwareEngineer(softwareEngineer);
+    public Integer addNewSoftwareEngineer(@Valid @RequestBody SoftwareEngineerRequest request) {
+        return softwareEngineerService.insertSoftwareEngineer(request);
     }
 
+    //수정(DTO 요청)
     @PutMapping("{id}")
     public void updateEngineer(
             @PathVariable Integer id,
-            @RequestBody SoftwareEngineer updatedEngineer
+            @Valid @RequestBody SoftwareEngineerRequest request
     ){
-        softwareEngineerService.updateSoftwareEngineer(id, updatedEngineer);
+        softwareEngineerService.updateSoftwareEngineer(id, request);
     }
 
     @DeleteMapping("{id}")
