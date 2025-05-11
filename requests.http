@@ -1,0 +1,30 @@
+### GET request to example server
+GET http://localhost:8080
+
+### 전체 소프트웨어 엔지니어 조회
+GET http://localhost:8080/api/v1/software-engineers
+
+### 특정 id의 엔지니어 조회
+GET http://localhost:8080/api/v1/software-engineers/7
+
+### 새 엔지니어 등록
+POST http://localhost:8080/api/v1/software-engineers
+Content-Type: application/json
+
+{
+  "name": "Alex",
+  "techStack": "kbd, databases, q"
+}
+
+### 엔지니어 정보 업데이트
+PUT http://localhost:8080/api/v1/software-engineers/1
+Content-Type: application/json
+
+{
+  "name": "chan",
+  "techStack": "Python, Scratch"
+}
+
+### 엔지니어 삭제
+
+DELETE http://localhost:8080/api/v1/software-engineers/1
