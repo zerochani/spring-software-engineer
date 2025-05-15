@@ -5,7 +5,7 @@ GET http://localhost:8080
 GET http://localhost:8080/api/v1/software-engineers
 
 ### 특정 id의 엔지니어 조회
-GET http://localhost:8080/api/v1/software-engineers/2
+GET http://localhost:8080/api/v1/software-engineers/1
 
 ### 새 엔지니어 등록
 POST http://localhost:8080/api/v1/software-engineers
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### 엔지니어 정보 업데이트
-PUT http://localhost:8080/api/v1/software-engineers/3
+PUT http://localhost:8080/api/v1/software-engineers/1
 Content-Type: application/json
 
 {
@@ -27,4 +27,21 @@ Content-Type: application/json
 
 ### 엔지니어 삭제
 
-DELETE http://localhost:8080/api/v1/software-engineers/2
+DELETE http://localhost:8080/api/v1/software-engineers/1
+
+### 기술 스택만 부분 수정
+PATCH http://localhost:8080/api/v1/software-engineers/1/tech-stack
+Content-Type: application/json
+
+{
+  "techStack" : "Spring Boot, JPA"
+}
+
+### HEAD 요청: ID 존재 여부 확인
+HEAD http://localhost:8080/api/v1/software-engineers/1
+
+### OPTIONS 루트 경로
+OPTIONS http://localhost:8080/api/v1/software-engineers
+
+### OPTIONS 특정 ID 경로
+OPTIONS http://localhost:8080/api/v1/software-engineers/1

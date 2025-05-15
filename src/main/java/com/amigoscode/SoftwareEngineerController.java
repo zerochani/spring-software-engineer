@@ -3,9 +3,13 @@ package com.amigoscode;
 import com.amigoscode.dto.SoftwareEngineerRequest;
 import com.amigoscode.dto.SoftwareEngineerResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
 // http 요청을 받아 서비스 로직을 호출하고, 클라이언트에게 응답을 반환
 @RestController //반환 값이 json 형태로 직렬화되어 클라이언트에 전달됨.
 @RequestMapping("api/v1/software-engineers")
@@ -50,4 +54,38 @@ public class SoftwareEngineerController {
     public void deleteEngineer(@PathVariable Integer id){
         softwareEngineerService.deleteSoftwareEngineer(id);
     }
+
+    //techStack만 부분 수정
+    @PatchMapping("{id}/tech-stack")
+    public void updateTechStack(
+            @PathVariable Integer id,
+            @RequestBody Map<String, String> update
+    ){
+        String newTechStack = update.get("techStack");
+        softwareEngineerService.updateTechStack(id, newTechStack);
+    }
+
+    // 리소스 존재 여부만 반환
+    @RequestMapping(value= "{id}", method = RequestMethod.HEAD)
+    public ResponseEntity<Void> checkExistence(@PathVariable Integer id){
+        boolean exists = softwareEngineerService.existsById(id);
+        return exists ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
+    // options: 루트 경로에 허용 메서드 안내
+    @RequestMapping(method=RequestMethod.OPTIONS)
+    public ResponseEntity<Void> optionsRoot(){
+        return ResponseEntity.ok()
+                .allow(HttpMethod.GET, HttpMethod.POST, HttpMethod.OPTIONS)
+                .build();
+    }
+
+    // options: id 경로에 허용 메서드 안내
+    @RequestMapping(value= " {id}", method=RequestMethod.OPTIONS)
+    public ResponseEntity<Void> optionsById(){
+        return ResponseEntity.ok()
+                .allow(HttpMethod.GET, HttpMethod.POST, HttpMethod.PATCH, HttpMethod.DELETE, HttpMethod.OPTIONS, HttpMethod.HEAD)
+                .build();
+    }
+
 }

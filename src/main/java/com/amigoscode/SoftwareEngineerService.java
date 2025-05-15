@@ -66,4 +66,19 @@ public class SoftwareEngineerService {
                 engineer.getTechStack()
         );
     }
+
+    //techStack만 부분 수정
+    public void updateTechStack(Integer id, String techStack){
+        SoftwareEngineer engineer = softwareEngineerRepository.findById(id)
+                .orElseThrow(()-> new IllegalStateException(id + " 없음"));
+        engineer.setTechStack(techStack);
+        softwareEngineerRepository.save(engineer);
+    }
+
+    //head 메서드용: 존재 여부 확인
+    public boolean existsById(Integer id){
+        return softwareEngineerRepository.existsById(id);
+    }
+
+
 }
