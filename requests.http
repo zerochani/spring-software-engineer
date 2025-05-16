@@ -45,3 +45,18 @@ OPTIONS http://localhost:8080/api/v1/software-engineers
 
 ### OPTIONS 특정 ID 경로
 OPTIONS http://localhost:8080/api/v1/software-engineers/1
+
+
+### 존재하지 않는 엔지니어 ID로 조회 (예: ID 9999)
+GET http://localhost:8080/api/v1/software-engineers/9999
+
+### 존재하지 않는 엔지니어 ID 삭제
+DELETE http://localhost:8080/api/v1/software-engineers/9999
+
+### 존재하지 않는 엔지니어 techStack만 수정
+PATCH http://localhost:8080/api/v1/software-engineers/9999/tech-stack
+Content-Type: application/json
+
+{
+  "techStack": "Rust, C++"
+}

@@ -2,6 +2,7 @@ package com.amigoscode;
 
 import com.amigoscode.dto.SoftwareEngineerRequest;
 import com.amigoscode.dto.SoftwareEngineerResponse;
+import com.amigoscode.exception.SoftwareEngineerNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,14 +37,14 @@ public class SoftwareEngineerService {
     //ID로 단건 조회(Entity->DTO 변환)
     public SoftwareEngineerResponse getSoftwareEngineerById(Integer id) {
         SoftwareEngineer engineer =  softwareEngineerRepository.findById(id)
-                .orElseThrow(()-> new IllegalStateException(id +" not found"));
+                .orElseThrow(()-> new SoftwareEngineerNotFoundException(id));
         return toResponse(engineer);
     }
 
     //엔지니어 수정
     public void updateSoftwareEngineer(Integer id, SoftwareEngineerRequest request){
         SoftwareEngineer existing = softwareEngineerRepository.findById(id)
-                .orElseThrow(()-> new IllegalStateException(id + " not found"));
+                .orElseThrow(()-> new SoftwareEngineerNotFoundException(id));
 
         existing.setName(request.getName());
         existing.setTechStack(request.getTechStack());
@@ -53,7 +54,7 @@ public class SoftwareEngineerService {
 
     public void deleteSoftwareEngineer(Integer id){
         if(!softwareEngineerRepository.existsById(id)){
-            throw new IllegalStateException(id + " not found");
+            throw new SoftwareEngineerNotFoundException(id);
         }
         softwareEngineerRepository.deleteById(id);
     }
@@ -70,7 +71,7 @@ public class SoftwareEngineerService {
     //techStack만 부분 수정
     public void updateTechStack(Integer id, String techStack){
         SoftwareEngineer engineer = softwareEngineerRepository.findById(id)
-                .orElseThrow(()-> new IllegalStateException(id + " 없음"));
+                .orElseThrow(()-> new SoftwareEngineerNotFoundException(id));
         engineer.setTechStack(techStack);
         softwareEngineerRepository.save(engineer);
     }
