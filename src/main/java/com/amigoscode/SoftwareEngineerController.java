@@ -2,6 +2,8 @@ package com.amigoscode;
 
 import com.amigoscode.dto.SoftwareEngineerRequest;
 import com.amigoscode.dto.SoftwareEngineerResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-// http 요청을 받아 서비스 로직을 호출하고, 클라이언트에게 응답을 반환
+@Tag(name="Software Engineers", description = "소프트웨어 엔지니어 CRUD API")
 @RestController //반환 값이 json 형태로 직렬화되어 클라이언트에 전달됨.
 @RequestMapping("api/v1/software-engineers")
 public class SoftwareEngineerController {
@@ -22,6 +24,7 @@ public class SoftwareEngineerController {
         this.softwareEngineerService = softwareEngineerService;
     }
 
+    @Operation(summary = "전체 엔지니어 조회", description = "DB에 등록된 모든 엔지니어를 반환")
     //전체 조회(DTO 응답)
     @GetMapping //데이터베이스에 저장된 모든 객체들을 반환.
     public List<SoftwareEngineerResponse> getEngineers() {
