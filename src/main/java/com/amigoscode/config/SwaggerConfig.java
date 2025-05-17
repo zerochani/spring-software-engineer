@@ -13,9 +13,9 @@ public class SwaggerConfig {
     public OpenAPI softwareEngineerOpenAPI(){
         return new OpenAPI()
                 .info(new Info()
-                        .title("Software Engineer API")
+                        .title("Software Engineer CRUD API")
                         .version("v1.0.0")
-                        .description("Spring Boot + JPA 기반 소프트웨어 엔지니어 CRUD API 문서입니다.")
+                        .description("소프트웨어 엔지니어 등록/조회/수정/삭제 기능을 제공하는 REST API")
                         .contact(new Contact()
                                 .name("chani")
                                 .email("youngchan0510@gmail.com")
