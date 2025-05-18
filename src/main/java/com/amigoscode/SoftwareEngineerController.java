@@ -2,6 +2,7 @@ package com.amigoscode;
 
 import com.amigoscode.dto.SoftwareEngineerRequest;
 import com.amigoscode.dto.SoftwareEngineerResponse;
+import com.amigoscode.dto.TechStackUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,12 +10,11 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 import java.util.List;
 import java.util.Map;
 
-@Tag(name="Software Engineer API", description = "소프트웨어 엔지니어 CRUD API")
+@Tag(name="Software Engineers", description = "소프트웨어 엔지니어 CRUD API")
 @RestController //반환 값이 json 형태로 직렬화되어 클라이언트에 전달됨.
 @RequestMapping("api/v1/software-engineers")
 public class SoftwareEngineerController {
@@ -50,10 +50,6 @@ public class SoftwareEngineerController {
     @Operation(
             summary = "엔지니어 등록",
             description = "새로운 엔지니어 정보를 등록합니다.",
-            requestBody = @RequestBody(
-                    description = "등록할 엔지니어 정보 예시",
-                    required = true
-            ),
             responses = {
                     @ApiResponse(responseCode = "200", description = "등록 성공"),
                     @ApiResponse(responseCode = "400", description = "요청 형식 오류"),
@@ -68,10 +64,6 @@ public class SoftwareEngineerController {
     @Operation(
             summary = "엔지니어 수정",
             description = "ID를 기준으로 엔지니어 정보를 수정합니다.",
-            requestBody = @RequestBody(
-                    description = "수정할 엔지니어 정보 예시",
-                    required = true
-            ),
             responses = {
                     @ApiResponse(responseCode = "200", description = "수정 성공"),
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 ID"),
@@ -103,10 +95,6 @@ public class SoftwareEngineerController {
     @Operation(
             summary = "기술 스택 부분 수정",
             description = "엔지니어의 techStack 필드만 부분 수정합니다.",
-            requestBody = @RequestBody(
-                    description = "변경할 기술 스택 값 (예: { \"techStack\": \"Spring, Kotlin\" })",
-                    required = true
-            ),
             responses = {
                     @ApiResponse(responseCode = "200", description = "수정 성공"),
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 ID"),
@@ -116,10 +104,9 @@ public class SoftwareEngineerController {
     @PatchMapping("{id}/tech-stack")
     public void updateTechStack(
             @PathVariable Integer id,
-            @RequestBody Map<String, String> update
+            @RequestBody TechStackUpdateRequest request
     ){
-        String newTechStack = update.get("techStack");
-        softwareEngineerService.updateTechStack(id, newTechStack);
+        softwareEngineerService.updateTechStack(id, request.getTechStack());
     }
 
     @Operation(

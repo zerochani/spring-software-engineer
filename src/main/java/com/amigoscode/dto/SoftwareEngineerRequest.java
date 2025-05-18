@@ -7,9 +7,11 @@ import jakarta.validation.constraints.NotBlank;
 public class SoftwareEngineerRequest {
 
     @Schema(description="엔지니어 이름", example = "chani")
+    @NotBlank(message = "이름은 공백일 수 없습니다.")
     private String name;
 
     @Schema(description="기술 스택", example = "Java, Spring Boot")
+    @NotBlank(message = "기술 스택은 공백일 수 없습니다.")
     private String techStack;
 
     public SoftwareEngineerRequest() {

@@ -1,5 +1,6 @@
 package com.amigoscode.exception;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,9 +20,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
-    //일반 예외 처리
+    //Swagger 요청은 예외 처리하지 않도록 분기
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex){
+    public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex, HttpServletRequest request){
+        String uri = request.getRequestURI();
+
+        if(uri.contains("/swagger")|| uri.contains("/api-docs") || uri.contains("/v3/api-docs")){
+            throw new RuntimeException(ex); //그대로 예외 던지기(Swagger가 처리하도록)
+        }
         ApiErrorResponse response = new ApiErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "알 수 없는 서버 오류가 발생했습니다."
