@@ -79,4 +79,51 @@ public class SoftwareEngineerServiceTest {
         assertThatThrownBy(()-> service.deleteSoftwareEngineer(2))
                 .isInstanceOf(SoftwareEngineerNotFoundException.class);
     }
+
+    @Test
+    //수정 요청이 정상적으로 기존 데이터를 업데이트하는지 확인
+    void shouldUpdateEngineerSuccessfully(){
+        //given
+        SoftwareEngineer existing = new SoftwareEngineer(1,"Old", "C++");
+        SoftwareEngineerRequest request = new SoftwareEngineerRequest("New", "Rust");
+
+        when(repository.findById(1)).thenReturn(Optional.of(existing));
+        when(repository.save(any())).thenReturn(existing);
+
+        //when
+        service.updateSoftwareEngineer(1, request);
+
+        //then
+        assertThat(existing.getName()).isEqualTo("New");
+        assertThat(existing.getTechStack()).isEqualTo("Rust");
+    }
+
+    @Test
+    //전체 객체가 아니라 부분 필드만 수정하는 API 흐름이 잘 작동하는지 검증
+    void shouldUpdateTechStackOnly(){
+        //given
+        SoftwareEngineer existing = new SoftwareEngineer(1,"Dana", "Java");
+        when(repository.findById(1)).thenReturn(Optional.of(existing));
+        when(repository.save(any())).thenReturn(existing);
+
+        //when
+        service.updateTechStack(1,"Go");
+
+        //then
+        assertThat(existing.getTechStack()).isEqualTo("Go");
+        assertThat(existing.getName()).isEqualTo("Dana");
+    }
+
+    @Test
+    void shouldReturnTrueIfEngineerExists(){
+        when(repository.existsById(1)).thenReturn(true);
+        assertThat(service.existsById(1)).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseIfEngineerNotExists(){
+        when(repository.existsById(999)).thenReturn(false);
+        assertThat(service.existsById(999)).isFalse();
+    }
+
 }

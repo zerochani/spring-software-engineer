@@ -94,4 +94,35 @@ public class SoftwareEngineerControllerTest {
 
         verify(service).deleteSoftwareEngineer(1);
     }
+
+    //PATCH 테스트
+    @Test
+    void shouldUpdateTechStack() throws Exception{
+        String json = """
+                { "techStack": "Spring Boot, Rust"}
+                """;
+
+        mockMvc.perform(patch("/api/v1/software-engineers/1/tech-stack")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk());
+        verify(service).updateTechStack(1, "Spring Boot, Rust");
+    }
+
+    //HEAD 요청 테스트
+    @Test
+    void shouldReturn200WhenEngineerExists() throws Exception{
+        when(service.existsById(1)).thenReturn(true);
+
+        mockMvc.perform(head("/api/v1/software-engineers/1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldReturn404WhenEngineerNotExists() throws Exception{
+        when(service.existsById(999)).thenReturn(false);
+
+        mockMvc.perform(head("/api/v1/software-engineers/1"))
+                .andExpect(status().isNotFound());
+    }
 }
