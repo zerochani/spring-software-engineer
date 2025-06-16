@@ -1,6 +1,5 @@
 # 📘 Software Engineer CRUD API
 
-![project-logo](https://via.placeholder.com/800x200.png?text=Software+Engineer+CRUD+API)
 
 ![GitHub repo visits](https://visitor-badge.laobi.icu/badge?page_id=zerochani.spring-software-engineer)
 
